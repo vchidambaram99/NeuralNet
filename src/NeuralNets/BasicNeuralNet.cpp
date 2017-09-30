@@ -9,6 +9,8 @@
 #include <random>
 #include <ctime>
 
+typedef Eigen::MatrixXd (*activationFunction)(Eigen::MatrixXd); //activation function pointers and their derivatives
+
 static void randomInitialize(Eigen::MatrixXd& matrix, double mean, double stdDev, double shift){
 	std::default_random_engine generator(srand((unsigned)time(NULL)));
 	std::normal_distribution dist(mean,stdDev);
@@ -32,9 +34,9 @@ BasicNeuralNet::BasicNeuralNet(){
 	costFunction = nullptr;
 	bias = true;
 }
-BasicNeuralNet::BasicNeuralNet(std::vector<int> layerSizes, std::vector<Eigen::MatrixXd (*)(Eigen::MatrixXd)> _activationFunctions,
-				   std::vector<Eigen::MatrixXd (*)(Eigen::MatrixXd)> _derivatives,
-				   Eigen::MatrixXd (*_costFunction) (Eigen::MatrixXd,Eigen::MatrixXd), bool _bias){
+BasicNeuralNet::BasicNeuralNet(std::vector<int> layerSizes, std::vector<activationFunction> _activationFunctions,
+							   std::vector<activationFunction> _derivatives,
+							   Eigen::MatrixXd (*_costFunction) (Eigen::MatrixXd,Eigen::MatrixXd), bool _bias){
 	bias = _bias;
 	costFunction = _costFunction;
 	weights = std::vector(layerSizes.size()-1);
