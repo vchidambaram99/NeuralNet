@@ -12,8 +12,8 @@
 #include <fstream>
 #include <Eigen/Dense>
 
-std::vector<int> readLabels(std::string filename){
-	std::vector<int> d;
+std::vector<Eigen::MatrixXd> readLabels(std::string filename){//vector of Matrices representing answers
+	std::vector<Eigen::MatrixXd> d;
 	std::ifstream data(filename,std::ios::binary|std::ios::in|std::ios::ate);
 	if(data.is_open()){
 		int size = data.tellg();
@@ -35,9 +35,10 @@ std::vector<int> readLabels(std::string filename){
 		for(int i = 4;i<8;i++){
 			count = (count<<8) + memblock[i];
 		}
-		d = std::vector<int>(count);
+		d = std::vector<Eigen::MatrixXd>(count);
 		for(int i = 0;i<count;i++){
-			d[i] = memblock[i+8];
+			d[i] = Eigen::MatrixXd::Zero(10,1);
+			d[i]((int)memblock[i+8]) = 1;
 		}
 		delete[] memblock; //deletes dynamically allocated memblock
 	}else{
@@ -46,8 +47,8 @@ std::vector<int> readLabels(std::string filename){
 	}
 	return d;
 }
-std::vector<std::vector<double>> readImages(std::string filename){
-	std::vector<std::vector<double>> d;
+std::vector<Eigen::MatrixXd> readImages(std::string filename){//vector of Matrices containing image
+	std::vector<Eigen::MatrixXd> d;
 	std::ifstream data(filename,std::ios::binary|std::ios::in|std::ios::ate);
 	if(data.is_open()){
 		int size = data.tellg();
@@ -76,10 +77,11 @@ std::vector<std::vector<double>> readImages(std::string filename){
 		for(int i = 12;i<16;i++){
 			cols = (cols<<8) + memblock[i];
 		}
-		d = std::vector<std::vector<double>>(count,std::vector<double>(rows*cols));//constructs vector for storing images
+		d = std::vector<Eigen::MatrixXd>(count);//constructs vector for storing images
 		for(int i = 0;i<count;i++){
+			d[i] = Eigen::MatrixXd::Zero(rows*cols,1);
 			for(int j = 0;j<rows*cols;j++){
-				d[i][j] = ((double)memblock[(i*rows*cols)+j+16])/256;
+				d[i](j) = ((double)memblock[(i*rows*cols)+j+16])/256;
 			}
 		}
 		delete[] memblock; //deletes dynamically allocated memblock

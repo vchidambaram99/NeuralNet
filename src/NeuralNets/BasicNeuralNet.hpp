@@ -21,6 +21,7 @@ public:
 	std::vector<activationFunction> derivativeFunctions;
 	costFunction cost;
 	bool bias;
+	double learnRate;
 
 	BasicNeuralNet();
 
@@ -28,7 +29,7 @@ public:
 	//activationFunctions is a vector to function pointers that apply to MatrixXds
 	//derivatives is the derivatives of activationFunctions
 	BasicNeuralNet(std::vector<int> layerSizes, std::vector<activationFunction> _activationFunctions,
-				   std::vector<activationFunction> _derivativeFunctions,
+				   std::vector<activationFunction> _derivativeFunctions, double _learnRate,
 				   Eigen::MatrixXd (*_costFunction) (Eigen::MatrixXd,Eigen::MatrixXd&), bool _bias);
 
 	Eigen::MatrixXd fire(Eigen::MatrixXd input);//columns of input are each case (can do multiple cases simultaneously)

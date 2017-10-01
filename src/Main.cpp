@@ -8,16 +8,56 @@
 #include "NeuralNets/BasicNeuralNet.hpp"
 #include "NeuralNets/ActivationFunctions.hpp"
 #include "NeuralNets/CostFunctions.hpp"
+#include <ctime>
+#include <cstdlib>
 using namespace std;
 
 int main(){
-	Eigen::MatrixXd a(4,2);
-	a<<1,2,3,4,5,6,7,8;
-	vector<int> ls = {4,5,4};
-	std::vector<activationFunction> af = {sigmoid,sigmoid};
-	std::vector<activationFunction> df = {sigmoidDerivative,sigmoidDerivative};
-	BasicNeuralNet bnn(ls,af,df,quadraticCostDerivative,true);
-	cout<<bnn.fire(a)<<endl;
+	vector<Eigen::MatrixXd> trainLabels = readLabels("C:/Users/vchid/Downloads/c++net MNIST data/train-labels.idx1-ubyte");
+	vector<Eigen::MatrixXd> testLabels  = readLabels("C:/Users/vchid/Downloads/c++net MNIST data/t10k-labels.idx1-ubyte");
+	vector<Eigen::MatrixXd> trainImages = readImages("C:/Users/vchid/Downloads/c++net MNIST data/train-images.idx3-ubyte");
+	vector<Eigen::MatrixXd> testImages  = readImages("C:/Users/vchid/Downloads/c++net MNIST data/t10k-images.idx3-ubyte");
+	vector<int> ls = {784,30,10};
+	vector<activationFunction> at = {sigmoid,sigmoid};
+	vector<activationFunction> dt = {sigmoidDerivative,sigmoidDerivative};
+	BasicNeuralNet bnn(ls,at,dt,.3,quadraticCostDerivative,true);
+	int epochs = 30;
+	int minibatchSize = 10;
+	for(int i = 0;i<epochs;i++){
+		srand(time(0));
+		for(int j = trainLabels.size();j>1;j--){//Fisher-Yates shuffle of training data
+			int index = rand()%j;
+			Eigen::MatrixXd temp1 = trainLabels[index];
+			trainLabels[index] = trainLabels[j-1];
+			trainLabels[j-1] = temp1;
+			Eigen::MatrixXd temp2 = trainImages[index];
+			trainImages[index] = trainImages[j-1];
+			trainImages[j-1] = temp2;
+		}
+		for(int j = 0;j<trainLabels.size()/minibatchSize;j++){
+			Eigen::MatrixXd images(784,minibatchSize);
+			Eigen::MatrixXd labels(10,minibatchSize);
+			for(int k = 0;k<minibatchSize;k++){
+				images.col(k) = trainImages[(j*minibatchSize)+k];
+				labels.col(k) = trainLabels[(j*minibatchSize)+k];
+			}
+			bnn.backprop(images,labels);
+		}
+		int correct = 0;
+		for(int j = 0;j<testLabels.size();j++){
+			Eigen::MatrixXd a = bnn.fire(testImages[j]);
+			int maxindex = 0;
+			for(int k = 1;k<10;k++){
+				if(a(k)>a(maxindex)){
+					maxindex = k;
+				}
+			}
+			if(testLabels[j](maxindex)==1){
+				correct++;
+			}
+		}
+		cout<<"Test accuracy (after epoch "<<i<<"): "<<correct<<"/10000."<<endl;;
+	}
 	return 0;
 }
 

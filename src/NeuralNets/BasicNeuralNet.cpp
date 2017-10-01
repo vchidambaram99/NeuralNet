@@ -32,11 +32,13 @@ static void randomInitialize(Eigen::VectorXd& matrix, double mean, double stdDev
 BasicNeuralNet::BasicNeuralNet(){
 	cost = nullptr;
 	bias = true;
+	learnRate = 0.05;
 }
 BasicNeuralNet::BasicNeuralNet(std::vector<int> layerSizes, std::vector<activationFunction> _activationFunctions,
-							   std::vector<activationFunction> _derivativeFunctions,
+							   std::vector<activationFunction> _derivativeFunctions, double _learnRate,
 							   Eigen::MatrixXd (*_costFunction) (Eigen::MatrixXd,Eigen::MatrixXd&), bool _bias){
 	bias = _bias;
+	learnRate = _learnRate;
 	cost = _costFunction;
 	weights = std::vector<Eigen::MatrixXd>(layerSizes.size()-1);
 	activationFunctions = _activationFunctions;
@@ -56,9 +58,9 @@ BasicNeuralNet::BasicNeuralNet(std::vector<int> layerSizes, std::vector<activati
 Eigen::MatrixXd BasicNeuralNet::fire(Eigen::MatrixXd input){ //columns of input are each case (can do multiple cases simultaneously)
 	for(int i = 0;i<weights.size();i++){
 		if(bias){
-			input = (*activationFunctions[i])((weights[i]*input).colwise()+biases[i]);
+			input = activationFunctions[i]((weights[i]*input).colwise()+biases[i]);
 		}else{
-			input = (*activationFunctions[i])(weights[i]*input);
+			input = activationFunctions[i](weights[i]*input);
 		}
 	}
 	return input;
@@ -72,20 +74,20 @@ Eigen::MatrixXd BasicNeuralNet::backprop(Eigen::MatrixXd input, Eigen::MatrixXd 
 		Eigen::MatrixXd weighted;
 		if(bias)weighted = (weights[i]*activations[i]).colwise()+biases[i];
 		else weighted = weights[i]*activations[i];
-		activations[i+1] = (*activationFunctions[i])(weighted);
-		derivatives[i] = (*derivativeFunctions[i])(weighted);
+		activations[i+1] = activationFunctions[i](weighted);
+		derivatives[i] = derivativeFunctions[i](weighted);
 	}
-	errors.back() = cost(activations.back(),answer).cwiseProduct(derivatives.back()); //calculates error of last layer
+	errors.back() = (cost(activations.back(),answer)).cwiseProduct(derivatives.back()); //calculates error of last layer
 	for(int i = errors.size()-2;i>=0;i--){
 		errors[i] = (weights[i+1].transpose()*errors[i+1]).cwiseProduct(derivatives[i]); //calculates error of subsequent layers
 	}
 	if(bias){
 		for(int i = 0;i<biases.size();i++){
-			biases[i]+=errors[i].rowwise().sum(); //updates biases
+			biases[i]-=errors[i].rowwise().sum()*learnRate; //updates biases
 		}
 	}
 	for(int i = 0;i<weights.size();i++){
-		weights[i]+=errors[i]*activations[i].transpose(); //updates weights
+		weights[i]-=errors[i]*activations[i].transpose()*learnRate; //updates weights
 	}
 	return activations.back();
 }
