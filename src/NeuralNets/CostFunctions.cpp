@@ -20,4 +20,12 @@ Eigen::MatrixXd crossEntropyCostDerivative(Eigen::MatrixXd input, Eigen::MatrixX
 	return input;
 }
 
-
+Eigen::MatrixXd(*costDerivativeByNum(int a))(Eigen::MatrixXd,Eigen::MatrixXd&){
+	switch(a){
+	case quadCostNum:
+		return quadraticCostDerivative;
+	case crossEntropyNum:
+		return crossEntropyCostDerivative;
+	}
+	return 0;
+}

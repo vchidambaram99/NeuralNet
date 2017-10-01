@@ -64,3 +64,26 @@ Eigen::MatrixXd softmaxDerivative(Eigen::MatrixXd input){
 	}
 	return input;
 }
+
+Eigen::MatrixXd(*activationFunctionByNum(int a))(Eigen::MatrixXd){
+	switch(a){
+	case sigmoidNum:
+		return sigmoid;
+	case reluNum:
+		return relu;
+	case softmaxNum:
+		return softmax;
+	}
+	return 0;
+}
+Eigen::MatrixXd(*activationDerivativeByNum(int a))(Eigen::MatrixXd){
+	switch(a){
+	case sigmoidNum:
+		return sigmoidDerivative;
+	case reluNum:
+		return reluDerivative;
+	case softmaxNum:
+		return softmaxDerivative;
+	}
+	return 0;
+}
