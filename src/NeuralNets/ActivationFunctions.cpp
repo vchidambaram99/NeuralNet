@@ -6,15 +6,15 @@
  */
 #include "ActivationFunctions.hpp"
 
-Eigen::MatrixXd sigmoid(Eigen::MatrixXd input){
+Eigen::MatrixXd sigmoid(Eigen::MatrixXd input){//cols of input are vectors the sigmoid function is applied to
 	for(int i = 0;i<input.rows();i++){
 		for(int j = 0;j<input.cols();j++){
-			input(i,j) = 1/(1+exp(-input(i,j)));
+			input(i,j) = 1/(1+exp(-input(i,j)));//calculates sigmoid
 		}
 	}
 	return input;
 }
-Eigen::MatrixXd sigmoidDerivative(Eigen::MatrixXd input){
+Eigen::MatrixXd sigmoidDerivative(Eigen::MatrixXd input){//cols of input are vectors the sigmoid derivative is applied to
 	for(int i = 0;i<input.rows();i++){
 		for(int j = 0;j<input.cols();j++){
 			double a = 1/(1+exp(-input(i,j)));
@@ -23,7 +23,7 @@ Eigen::MatrixXd sigmoidDerivative(Eigen::MatrixXd input){
 	}
 	return input;
 }
-Eigen::MatrixXd relu(Eigen::MatrixXd input){
+Eigen::MatrixXd relu(Eigen::MatrixXd input){//cols of input are vectors the relu function is applied to
 	for(int i = 0;i<input.rows();i++){
 		for(int j = 0;j<input.cols();j++){
 			input(i,j) = (input(i,j)>0)?input(i,j):0;
@@ -31,7 +31,7 @@ Eigen::MatrixXd relu(Eigen::MatrixXd input){
 	}
 	return input;
 }
-Eigen::MatrixXd reluDerivative(Eigen::MatrixXd input){
+Eigen::MatrixXd reluDerivative(Eigen::MatrixXd input){//cols of input are vectors the relu derivative is applied to
 	for(int i = 0;i<input.rows();i++){
 		for(int j = 0;j<input.cols();j++){
 			input(i,j) = (input(i,j)>0)?1:0;
@@ -39,7 +39,7 @@ Eigen::MatrixXd reluDerivative(Eigen::MatrixXd input){
 	}
 	return input;
 }
-Eigen::MatrixXd softmax(Eigen::MatrixXd input){
+Eigen::MatrixXd softmax(Eigen::MatrixXd input){//cols of input are vectors the softmax function is applied to
 	for(int i = 0;i<input.cols();i++){
 		double expSum = 0;
 		for(int j = 0;j<input.rows();j++){
@@ -51,7 +51,7 @@ Eigen::MatrixXd softmax(Eigen::MatrixXd input){
 	}
 	return input;
 }
-Eigen::MatrixXd softmaxDerivative(Eigen::MatrixXd input){
+Eigen::MatrixXd softmaxDerivative(Eigen::MatrixXd input){//cols of input are vectors the softmax derivative is applied to
 	for(int i = 0;i<input.cols();i++){
 		double expSum = 0;
 		for(int j = 0;j<input.rows();j++){
@@ -65,7 +65,7 @@ Eigen::MatrixXd softmaxDerivative(Eigen::MatrixXd input){
 	return input;
 }
 
-Eigen::MatrixXd(*activationFunctionByNum(int a))(Eigen::MatrixXd){
+Eigen::MatrixXd(*activationFunctionByNum(int a))(Eigen::MatrixXd){//returns function pointer to appropriate activation function given num
 	switch(a){
 	case sigmoidNum:
 		return sigmoid;
@@ -76,7 +76,7 @@ Eigen::MatrixXd(*activationFunctionByNum(int a))(Eigen::MatrixXd){
 	}
 	return 0;
 }
-Eigen::MatrixXd(*activationDerivativeByNum(int a))(Eigen::MatrixXd){
+Eigen::MatrixXd(*activationDerivativeByNum(int a))(Eigen::MatrixXd){//returns function pointer to appropriate activation derivative given num
 	switch(a){
 	case sigmoidNum:
 		return sigmoidDerivative;

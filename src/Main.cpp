@@ -35,24 +35,24 @@ int main(){
 			trainImages[j-1] = temp2;
 		}
 		for(int j = 0;j<trainLabels.size()/minibatchSize;j++){
-			Eigen::MatrixXd images(784,minibatchSize);
-			Eigen::MatrixXd labels(10,minibatchSize);
+			Eigen::MatrixXd images(784,minibatchSize);//where minibatch images are stored
+			Eigen::MatrixXd labels(10,minibatchSize);//where minibatch labels are stored
 			for(int k = 0;k<minibatchSize;k++){
-				images.col(k) = trainImages[(j*minibatchSize)+k];
-				labels.col(k) = trainLabels[(j*minibatchSize)+k];
+				images.col(k) = trainImages[(j*minibatchSize)+k];//adds each image
+				labels.col(k) = trainLabels[(j*minibatchSize)+k];//adds each label
 			}
-			bnn.backprop(images,labels);
+			bnn.backprop(images,labels);//adjusts the weights for this minibatch
 		}
 		int correct = 0;
-		for(int j = 0;j<testLabels.size();j++){
+		for(int j = 0;j<testLabels.size();j++){//iterates over test cases
 			Eigen::MatrixXd a = bnn.fire(testImages[j]);
 			int maxindex = 0;
 			for(int k = 1;k<10;k++){
 				if(a(k)>a(maxindex)){
-					maxindex = k;
+					maxindex = k;//the index of the max of the vector returned by the neural net is its answer
 				}
 			}
-			if(testLabels[j](maxindex)==1){
+			if(testLabels[j](maxindex)==1){//counts number correct
 				correct++;
 			}
 		}

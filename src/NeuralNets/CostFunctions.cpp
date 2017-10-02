@@ -20,7 +20,7 @@ Eigen::MatrixXd crossEntropyCostDerivative(Eigen::MatrixXd input, Eigen::MatrixX
 	return input;
 }
 
-Eigen::MatrixXd(*costDerivativeByNum(int a))(Eigen::MatrixXd,Eigen::MatrixXd&){
+Eigen::MatrixXd(*costDerivativeByNum(int a))(Eigen::MatrixXd,Eigen::MatrixXd&){//returns appropriate cost function pointer give num
 	switch(a){
 	case quadCostNum:
 		return quadraticCostDerivative;

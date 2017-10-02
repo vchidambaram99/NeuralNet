@@ -10,7 +10,7 @@
 #include <random>
 #include <ctime>
 
-static void randomInitialize(Eigen::MatrixXd& matrix, double mean, double stdDev, double shift){
+static void randomInitialize(Eigen::MatrixXd& matrix, double mean, double stdDev, double shift){//initializes values of matrix randomly on a normal distribution
 	std::default_random_engine generator((unsigned)time(0));
 	std::normal_distribution<double> dist(mean,stdDev);
 	for(int i = 0;i<matrix.rows();i++){
@@ -19,7 +19,7 @@ static void randomInitialize(Eigen::MatrixXd& matrix, double mean, double stdDev
 		}
 	}
 }
-static void randomInitialize(Eigen::VectorXd& matrix, double mean, double stdDev, double shift){
+static void randomInitialize(Eigen::VectorXd& matrix, double mean, double stdDev, double shift){//same as above for vectors
 	std::default_random_engine generator((unsigned)time(0));
 	std::normal_distribution<double> dist(mean,stdDev);
 	for(int i = 0;i<matrix.rows();i++){
@@ -29,7 +29,7 @@ static void randomInitialize(Eigen::VectorXd& matrix, double mean, double stdDev
 	}
 }
 
-BasicNeuralNet::BasicNeuralNet(){
+BasicNeuralNet::BasicNeuralNet(){//empty constructor
 	cost = nullptr;
 	bias = true;
 	learnRate = 0.05;
@@ -55,8 +55,8 @@ BasicNeuralNet::BasicNeuralNet(std::vector<int> layerSizes, std::vector<activati
 		}
 	}
 }
-Eigen::MatrixXd BasicNeuralNet::fire(Eigen::MatrixXd input){ //columns of input are each case (can do multiple cases simultaneously)
-	for(int i = 0;i<weights.size();i++){
+Eigen::MatrixXd BasicNeuralNet::fire(Eigen::MatrixXd input){ //columns of input are each case (can do multiple cases simultaneously or SGD)
+	for(int i = 0;i<weights.size();i++){//runs the activation function on the weighted matrices and iterates through network
 		if(bias){
 			input = activationFunctions[i]((weights[i]*input).colwise()+biases[i]);
 		}else{
@@ -65,7 +65,7 @@ Eigen::MatrixXd BasicNeuralNet::fire(Eigen::MatrixXd input){ //columns of input 
 	}
 	return input;
 }
-Eigen::MatrixXd BasicNeuralNet::backprop(Eigen::MatrixXd input, Eigen::MatrixXd answer){
+Eigen::MatrixXd BasicNeuralNet::backprop(Eigen::MatrixXd input, Eigen::MatrixXd answer){//updates weights and biases given answers and input
 	std::vector<Eigen::MatrixXd> activations = std::vector<Eigen::MatrixXd>(weights.size()+1); //activations of all (even input) layers
 	std::vector<Eigen::MatrixXd> derivatives = std::vector<Eigen::MatrixXd>(weights.size());   //derivatives of all non-input layers
 	std::vector<Eigen::MatrixXd> errors 	 = std::vector<Eigen::MatrixXd>(weights.size());   //errors of all non-input layers
@@ -74,8 +74,8 @@ Eigen::MatrixXd BasicNeuralNet::backprop(Eigen::MatrixXd input, Eigen::MatrixXd 
 		Eigen::MatrixXd weighted;
 		if(bias)weighted = (weights[i]*activations[i]).colwise()+biases[i];
 		else weighted = weights[i]*activations[i];
-		activations[i+1] = activationFunctions[i](weighted);
-		derivatives[i] = derivativeFunctions[i](weighted);
+		activations[i+1] = activationFunctions[i](weighted);//saves the activation of this layer
+		derivatives[i] = derivativeFunctions[i](weighted);//saves the derivatives of this layer
 	}
 	errors.back() = (cost(activations.back(),answer)).cwiseProduct(derivatives.back()); //calculates error of last layer
 	for(int i = errors.size()-2;i>=0;i--){
@@ -89,7 +89,7 @@ Eigen::MatrixXd BasicNeuralNet::backprop(Eigen::MatrixXd input, Eigen::MatrixXd 
 	for(int i = 0;i<weights.size();i++){
 		weights[i]-=errors[i]*activations[i].transpose()*learnRate; //updates weights
 	}
-	return activations.back();
+	return activations.back();//returns the output of the net (what fire() would return), so it can be used if necessary
 }
 
 
