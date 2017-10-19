@@ -5,7 +5,7 @@
  *      Author: vchid
  */
 
-#include "BasicNeuralnet.hpp"
+#include "BasicNeuralNet.hpp"
 #include <iostream>
 #include <random>
 #include <ctime>
@@ -91,5 +91,3 @@ Eigen::MatrixXd BasicNeuralNet::backprop(Eigen::MatrixXd input, Eigen::MatrixXd 
 	}
 	return activations.back();//returns the output of the net (what fire() would return), so it can be used if necessary
 }
-
-

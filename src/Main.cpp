@@ -13,10 +13,10 @@
 using namespace std;
 
 int main(){
-	vector<Eigen::MatrixXd> trainLabels = readLabels("C:/Users/vchid/Downloads/c++net MNIST data/train-labels.idx1-ubyte");
-	vector<Eigen::MatrixXd> testLabels  = readLabels("C:/Users/vchid/Downloads/c++net MNIST data/t10k-labels.idx1-ubyte");
-	vector<Eigen::MatrixXd> trainImages = readImages("C:/Users/vchid/Downloads/c++net MNIST data/train-images.idx3-ubyte");
-	vector<Eigen::MatrixXd> testImages  = readImages("C:/Users/vchid/Downloads/c++net MNIST data/t10k-images.idx3-ubyte");
+	vector<Eigen::MatrixXd> trainLabels = readLabels("/home/valliappan/Downloads/MNIST/train-labels.idx1-ubyte");
+	vector<Eigen::MatrixXd> testLabels  = readLabels("/home/valliappan/Downloads/MNIST/t10k-labels.idx1-ubyte");
+	vector<Eigen::MatrixXd> trainImages = readImages("/home/valliappan/Downloads/MNIST/train-images.idx3-ubyte");
+	vector<Eigen::MatrixXd> testImages  = readImages("/home/valliappan/Downloads/MNIST/t10k-images.idx3-ubyte");
 	vector<int> ls = {784,30,10};
 	vector<activationFunction> at = {sigmoid,sigmoid};
 	vector<activationFunction> dt = {sigmoidDerivative,sigmoidDerivative};
@@ -56,9 +56,7 @@ int main(){
 				correct++;
 			}
 		}
-		cout<<"Test accuracy (after epoch "<<i<<"): "<<correct<<"/10000."<<endl;;
+		cout<<"Test accuracy (after epoch "<<i<<"): "<<correct<<"/10000."<<endl;
 	}
 	return 0;
 }
-
-
