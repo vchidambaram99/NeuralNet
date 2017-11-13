@@ -1,12 +1,12 @@
 /*
- * CostFunctions.hpp
+ * CostFunctions.h
  *
  *  Created on: Sep 28, 2017
  *      Author: vchid
  */
 
-#ifndef NEURALNETS_COSTFUNCTIONS_HPP_
-#define NEURALNETS_COSTFUNCTIONS_HPP_
+#ifndef NEURALNETS_COSTFUNCTIONS_H_
+#define NEURALNETS_COSTFUNCTIONS_H_
 #include <Eigen/Dense>
 
 Eigen::MatrixXd quadraticCostDerivative(Eigen::MatrixXd input, Eigen::MatrixXd &answer);
@@ -17,4 +17,4 @@ const int crossEntropyNum = 1;
 
 Eigen::MatrixXd(*costDerivativeByNum(int a))(Eigen::MatrixXd,Eigen::MatrixXd&);
 
-#endif /* NEURALNETS_COSTFUNCTIONS_HPP_ */
+#endif /* NEURALNETS_COSTFUNCTIONS_H_ */

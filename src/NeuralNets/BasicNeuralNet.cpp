@@ -5,7 +5,7 @@
  *      Author: vchid
  */
 
-#include "BasicNeuralNet.hpp"
+#include "BasicNeuralNet.h"
 #include <iostream>
 #include <random>
 #include <ctime>

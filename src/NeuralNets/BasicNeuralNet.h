@@ -1,12 +1,12 @@
 /*
- * BasicNeuralNet.hpp
+ * BasicNeuralNet.h
  *
  *  Created on: Sep 28, 2017
  *      Author: vchid
  */
 
-#ifndef NEURALNETS_BASICNEURALNET_HPP_
-#define NEURALNETS_BASICNEURALNET_HPP_
+#ifndef NEURALNETS_BASICNEURALNET_H_
+#define NEURALNETS_BASICNEURALNET_H_
 #include <vector>
 #include <Eigen/Dense>
 
@@ -36,4 +36,4 @@ public:
 	Eigen::MatrixXd backprop(Eigen::MatrixXd input, Eigen::MatrixXd answer);
 };
 
-#endif /* NEURALNETS_BASICNEURALNET_HPP_ */
+#endif /* NEURALNETS_BASICNEURALNET_H_ */

@@ -4,7 +4,7 @@
  *  Created on: Sep 28, 2017
  *      Author: vchid
  */
-#include "CostFunctions.hpp"
+#include "CostFunctions.h"
 
 Eigen::MatrixXd quadraticCostDerivative(Eigen::MatrixXd input, Eigen::MatrixXd &answer){
 	return input-answer;
@@ -20,7 +20,7 @@ Eigen::MatrixXd crossEntropyCostDerivative(Eigen::MatrixXd input, Eigen::MatrixX
 	return input;
 }
 
-Eigen::MatrixXd(*costDerivativeByNum(int a))(Eigen::MatrixXd,Eigen::MatrixXd&){//returns appropriate cost function pointer give num
+Eigen::MatrixXd(*costDerivativeByNum(int a))(Eigen::MatrixXd,Eigen::MatrixXd&){//returns appropriate cost function pointer given num
 	switch(a){
 	case quadCostNum:
 		return quadraticCostDerivative;

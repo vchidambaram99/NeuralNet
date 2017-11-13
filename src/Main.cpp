@@ -4,10 +4,11 @@
  *  Created on: Sep 28, 2017
  *      Author: vchid
  */
-#include "MNIST/MNISTReader.hpp"
-#include "NeuralNets/BasicNeuralNet.hpp"
-#include "NeuralNets/ActivationFunctions.hpp"
-#include "NeuralNets/CostFunctions.hpp"
+#include "MNIST/MNISTReader.h"
+#include "NeuralNets/BasicNeuralNet.h"
+#include "Functions/ActivationFunctions.h"
+#include "Functions/CostFunctions.h"
+#include "Layers/Layer.h"
 #include <ctime>
 #include <cstdlib>
 using namespace std;
